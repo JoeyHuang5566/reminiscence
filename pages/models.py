@@ -47,8 +47,8 @@ class UserSettings(models.Model):
     save_png = models.BooleanField(default=False)
     png_quality = models.PositiveSmallIntegerField(default=85)
     pagination_value = models.PositiveSmallIntegerField(default=100)
-    buddy_list = models.CharField(max_length=8192, null=True)
-    download_manager = models.CharField(max_length=8192, default='wget {iurl} -O {output}')
+    buddy_list = models.TextField(null=True)
+    download_manager = models.TextField(default='wget {iurl} -O {output}')
     media_streaming = models.BooleanField(default=False)
     reader_theme = models.PositiveSmallIntegerField(choices=READER_CHOICES, default=WHITE)
     
@@ -68,16 +68,16 @@ class Library(models.Model):
     
     usr = models.ForeignKey(User, related_name='usr', on_delete=models.CASCADE)
     directory = models.CharField(max_length=2048)
-    url = models.CharField(max_length=4096, null=True)
-    icon_url = models.CharField(max_length=4096, null=True)
+    url = models.TextField(null=True)
+    icon_url = models.TextField(null=True)
     title = models.CharField(max_length=2048, null=True)
     timestamp = models.DateTimeField(null=True)
-    media_path = models.CharField(max_length=4096, null=True)
+    media_path = models.TextField(null=True)
     access = models.PositiveSmallIntegerField(choices=ACCESS_CHOICES, default=PRIVATE)
     summary = models.TextField(null=True)
-    tags = models.CharField(max_length=4096, null=True)
+    tags = models.TextField(null=True)
     media_element = models.BooleanField(default=False)
-    subdir = models.CharField(max_length=8192, null=True)
+    subdir = models.TextField(null=True)
     reader_mode = models.PositiveSmallIntegerField(choices=UserSettings.READER_CHOICES,
                                                    default=UserSettings.WHITE)
     

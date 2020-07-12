@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='usersettings',
             name='download_manager',
-            field=models.CharField(default='wget {iurl} -O {output}', max_length=8192),
+            field=models.TextField(default='wget {iurl} -O {output}', max_length=8192),
         ),
         migrations.AddField(
             model_name='usersettings',

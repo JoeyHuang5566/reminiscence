@@ -13,17 +13,17 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='library',
             name='icon_url',
-            field=models.CharField(max_length=4096, null=True),
+            field=models.TextField(null=True),
         ),
         migrations.AlterField(
             model_name='library',
             name='media_path',
-            field=models.CharField(max_length=4096, null=True),
+            field=models.TextField(null=True),
         ),
         migrations.AlterField(
             model_name='library',
             name='subdir',
-            field=models.CharField(max_length=8192, null=True),
+            field=models.TextField(null=True),
         ),
         migrations.AlterField(
             model_name='library',
@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='library',
             name='tags',
-            field=models.CharField(max_length=4096, null=True),
+            field=models.TextField(null=True),
         ),
         migrations.AlterField(
             model_name='library',
@@ -48,6 +48,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='library',
             name='url',
-            field=models.CharField(max_length=4096, null=True),
+            field=models.TextField(null=True),
         ),
     ]

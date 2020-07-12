@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='library',
             name='tags',
-            field=models.CharField(max_length=4096, null=True),
+            field=models.TextField(null=True),
         ),
     ]

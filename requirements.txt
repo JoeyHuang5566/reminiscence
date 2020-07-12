@@ -17,7 +17,7 @@ kombu==4.2.1
 lxml==4.2.4
 multidict==4.3.1
 nltk==3.4.5
-psycopg2==2.7.5
+psycopg2-binary==2.8.4
 pytz==2018.5
 readability-lxml==0.7
 redis==2.10.6
@@ -25,3 +25,4 @@ six==1.11.0
 sqlparse==0.3.0
 vine==1.1.4
 yarl==1.2.6
+mysqlclient==1.4.6

@@ -88,7 +88,8 @@ INSTALLED_APPS = [
     'vinanti',
     'rest_framework',
     'rest_framework.authtoken',
-    'restapi'
+    'restapi',
+    'debug_toolbar'
 ]
 
 REST_FRAMEWORK = {
@@ -105,6 +106,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'reminiscence.urls'
@@ -252,3 +254,8 @@ DOWNLOAD_MANAGERS_ALLOWED = ['curl', 'wget']
 CHROMIUM_COMMAND = "chromium"
 
 CHROMIUM_SANDBOX = True
+
+#Debug Toolbar
+INTERNAL_IPS = [
+    '127.0.0.1',
+]

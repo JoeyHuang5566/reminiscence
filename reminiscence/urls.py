@@ -31,11 +31,17 @@ if settings.ROOT_URL_LOCATION:
 else:
     root_loc = ''
     custom_loc = '^'
-    
+
 urlpatterns = [
     url(r'{}admin/'.format(custom_loc), admin.site.urls),
     url(r'{}restapi/'.format(custom_loc), include('restapi.urls')),
     url(r'{}'.format(root_loc), include('pages.urls')),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
 
 urlpatterns += staticfiles_urlpatterns()

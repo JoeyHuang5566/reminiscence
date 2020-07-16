@@ -105,4 +105,18 @@ class RemoveDir(forms.Form):
                 dbxs.remove_url_link(usr, row=row)
         if '/' in directory:
             dbxs.remove_subdirectory_link(usr, directory)
-            
+
+
+class CheckWebsite(forms.Form):
+    website_url = forms.URLField(
+        max_length=2048, required=True,
+        widget=forms.TextInput(attrs={'placeholder':'Enter URL'})
+    )
+    selector_script = forms.CharField(
+        max_length=2048, required=True,
+        widget=forms.TextInput(attrs={'placeholder':'Enter Script'})
+    )
+    expected_string = forms.CharField(
+        max_length=2048, required=True,
+        widget=forms.TextInput(attrs={'placeholder':'Enter Expected String'})
+    )

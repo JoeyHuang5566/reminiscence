@@ -22,10 +22,11 @@ from django.urls import re_path as url
 from .views import *
 from accounts.views import signup
 from django.contrib.auth import views as auth_views
-
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', dashboard, name='home'),
+    path('websiteCheckedLab/', websiteCheckedLab, name='websiteCheckedLab'),
     path('signup/', signup, name='signup'),
     path('annotate/annotations', create_annotations, name='ann_create'),
     path('annotate/annotations/<int:annot_id>', modify_annotations, name='ann_modify'),

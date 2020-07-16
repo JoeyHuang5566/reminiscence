@@ -44,9 +44,10 @@ from django.conf import settings
 
 from vinanti import Vinanti
 from bs4 import BeautifulSoup
+import requests
 
 from .models import Library, Tags, URLTags, UserSettings
-from .forms import AddDir, RenameDir, RemoveDir, AddURL
+from .forms import AddDir, RenameDir, RemoveDir, AddURL, CheckWebsite
 from .custom_read import CustomRead as cread
 from .dbaccess import DBAccess as dbxs
 from .summarize import Summarizer
@@ -81,6 +82,36 @@ def dashboard(request, username=None, directory=None):
                     request, 'home.html',
                     {
                         'usr_list': nlist, 'form':form,
+                        'root':settings.ROOT_URL_LOCATION
+                    }
+                )
+    return response
+
+
+@login_required
+def websiteCheckedLab(request, username=None, directory=None):
+    usr = request.user
+    if username and username != usr.username:
+        return redirect('/'+usr.username)
+
+    result = {}
+    if request.method == 'POST':
+        form = CheckWebsite(request.POST)
+
+        res = requests.get(form["website_url"].value())
+        soup = BeautifulSoup(res.text, 'lxml')
+        titles = soup.select(form["selector_script"].value())
+
+        result["status"] = res.status_code
+        result["actual"] = titles[0].string if titles else ""
+        result["is_match"] = result["actual"] == form["expected_string"].value()
+    else:
+        form = CheckWebsite()
+
+    response = render(
+                    request, 'website_checked_lab.html',
+                    {
+                        'form':form,'result':result,
                         'root':settings.ROOT_URL_LOCATION
                     }
                 )

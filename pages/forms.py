@@ -120,3 +120,24 @@ class CheckWebsite(forms.Form):
         max_length=2048, required=True,
         widget=forms.TextInput(attrs={'placeholder':'Enter Expected String'})
     )
+
+
+class SetCheckingLogic(forms.Form):
+    CHOICES = (
+        (False, 'Deactivate'),
+        (True, 'Activate')
+    )
+
+    target_url = forms.URLField(
+        max_length=2048, required=True,
+        widget=forms.TextInput(attrs={'placeholder':'Enter URL'})
+    )
+    selector_script = forms.CharField(
+        max_length=2048, required=True,
+        widget=forms.TextInput(attrs={'placeholder':'Enter Script'})
+    )
+    expected_string = forms.CharField(
+        max_length=2048, required=True,
+        widget=forms.TextInput(attrs={'placeholder':'Enter Expected String'})
+    )
+    activate = forms.BooleanField(required=False, widget=forms.Select(choices=CHOICES))

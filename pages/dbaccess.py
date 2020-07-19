@@ -557,6 +557,7 @@ class DBAccess:
             base_remove = base_dir + '/remove'
             base_rename = base_dir + '/rename'
             base_et = base_dir + '/edit-bookmark'
+            base_ck = base_dir + '/edit-checking-logic'
             move_single = base_dir + '/move-bookmark'
             move_multiple = base_dir + '/move-bookmark-multiple'
             base_eu = base_dir + '/edit-url'
@@ -603,7 +604,7 @@ class DBAccess:
                                 'archive-media':archive_media, 'directory':directory,
                                 'read-url':read_url, 'id': idd, 'fav-path': fav_path,
                                 'media-element': media_element, 'is-subdir': is_subdir,
-                                'base-rename': base_rename
+                                'base-rename': base_rename, 'edit-checking-logic':base_ck
                             }
                         }
                     )
@@ -613,7 +614,7 @@ class DBAccess:
                         index, title, netloc, url, base_et, base_remove,
                         timestamp, tag, move_single, move_multiple,
                         archive_media, directory, read_url, idd, fav_path,
-                        media_element, is_subdir, base_rename
+                        media_element, is_subdir, base_rename, base_ck
                     ]
                 )
             index += 1

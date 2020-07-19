@@ -609,6 +609,7 @@ function generate_table_body(nlink, search, mode){
             var fav_path = value['fav-path'];
             var idd = value['id'];
             var is_subdir = value['is-subdir'];
+            var edit_ck = value['edit-checking-logic'];
             
             var badges = create_badge_nodes(usr, taglist, 'div', root_loc);
             if (mode == 'dir'){
@@ -620,7 +621,7 @@ function generate_table_body(nlink, search, mode){
                     usr, badges, index, title, netloc, loc,
                     timestamp, edit_b, ms, remove_link,
                     archive_media, directory, dir_badge,
-                    read_url, idd, fav_path, root_loc, is_subdir);
+                    read_url, idd, fav_path, root_loc, is_subdir, edit_ck);
             $("#tbody").append(table_content);
         }
     })
@@ -758,7 +759,7 @@ function display_upload_file_name(event){
 function create_table_rows(usr, badge_nodes, index, title, netloc,
                            loc, timestamp, edit_b, ms, remove_link,
                            archive_media, dirname, dir_badge,
-                           read_url, idd, fav_path, root, is_subdir){
+                           read_url, idd, fav_path, root, is_subdir, edit_ck){
     console.log(root);
     var string = `<tr>
         <td><img width="24" src="${fav_path}"></td>
@@ -783,6 +784,10 @@ function create_table_rows(usr, badge_nodes, index, title, netloc,
                 <span id="drop-edit-${index}" class="dropdown-item" \
                  data-link="${edit_b}" title="${title}" data-val="url"\
                  onclick="onsearch_dropdown(event, id)">Edit Bookmark</span>
+
+                <span id="drop-check-${index}" class="dropdown-item" \
+                 data-link="${edit_ck}" title="${title}" data-val="url_read"\
+                 onclick="onsearch_dropdown(event, id)">Edit Checking Logic</span>
                  
                 <div class="dropdown-divider"></div>
                 

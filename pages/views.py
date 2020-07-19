@@ -46,8 +46,8 @@ from vinanti import Vinanti
 from bs4 import BeautifulSoup
 import requests
 
-from .models import Library, Tags, URLTags, UserSettings
-from .forms import AddDir, RenameDir, RemoveDir, AddURL, CheckWebsite
+from .models import Library, Tags, URLTags, UserSettings, URLChecking
+from .forms import AddDir, RenameDir, RemoveDir, AddURL, CheckWebsite, SetCheckingLogic
 from .custom_read import CustomRead as cread
 from .dbaccess import DBAccess as dbxs
 from .summarize import Summarizer
@@ -89,7 +89,7 @@ def dashboard(request, username=None, directory=None):
 
 
 @login_required
-def websiteCheckedLab(request, username=None, directory=None):
+def website_checked_lab(request, username=None, directory=None):
     usr = request.user
     if username and username != usr.username:
         return redirect('/'+usr.username)
@@ -117,6 +117,45 @@ def websiteCheckedLab(request, username=None, directory=None):
                 )
     return response
 
+@login_required
+def perform_link_checking_logic(request, username, directory, url_id=None):
+    usr = request.user
+    logger.info(request.path_info)
+    if username and usr.username != username:
+        return HttpResponse('Not Allowed')
+
+    result = {}
+    if request.method == 'POST':
+        form = SetCheckingLogic(request.POST)
+
+        res = requests.get(form["target_url"].value())
+        soup = BeautifulSoup(res.text, 'lxml')
+        titles = soup.select(form["selector_script"].value())
+
+        result["status"] = res.status_code
+        result["actual"] = titles[0].string if titles else ""
+        result["is_match"] = result["actual"] == form["expected_string"].value()
+        print(form["activate"].value())
+    else:
+        form = SetCheckingLogic()
+        url_checking_logic = URLChecking.objects.filter(library_id = int(url_id)).first()
+        if url_checking_logic:
+            form.fields["target_url"].initial = url_checking_logic.url
+            form.fields["activate"].initial = url_checking_logic.activate
+            form.fields["expected_string"].initial = url_checking_logic.expected
+            form.fields["selector_script"].initial = url_checking_logic.script
+        else:
+            form.fields["target_url"].initial = Library.objects.filter(usr=usr, id=int(url_id)).first().url
+            form.fields["activate"].initial = False
+
+    response = render(
+                    request, 'website_checking_logic.html',
+                    {
+                        'form':form,'result':result,'dir':directory,
+                        'root':settings.ROOT_URL_LOCATION
+                    }
+                )
+    return response
 
 @login_required
 def rename_operation(request, username, directory):
@@ -232,6 +271,7 @@ def get_relative_resources(request, username, directory, url_id, rel_path):
                 logger.debug('resource: {} not available'.format(resource_loc))
     return HttpResponse('Not Found')
 
+
 @login_required
 def perform_epub_operation(request, username, directory, url_id=None, opt=None, meta_path=None):
     usr = request.user
@@ -307,7 +347,6 @@ def perform_link_operation(request, username, directory, url_id=None):
         return HttpResponse(msg)
     else:
         return HttpResponse('What are you trying to accomplish!')
-
 
 @login_required
 def default_dest(request):

@@ -113,4 +113,26 @@ class GroupTable(models.Model):
                                  on_delete=models.CASCADE)
     buddy = models.ForeignKey(User, related_name='usr_buddy',
                               on_delete=models.CASCADE)
-    
+
+
+class URLChecking(models.Model):
+
+    library = models.ForeignKey(Library, on_delete=models.CASCADE)
+    url = models.TextField(null=True)
+    expected = models.CharField(max_length=2048)
+    script = models.CharField(max_length=2048)
+    activate = models.BooleanField(default=False)
+    updated_at = models.DateTimeField()
+
+    def __str__(self):
+        return self.library.url
+
+
+class URLCheckingResult(models.Model):
+    library = models.ForeignKey(Library, on_delete=models.CASCADE)
+    status = models.PositiveSmallIntegerField(default=0)
+    actual = models.CharField(max_length=2048, null=True)
+    updated_at = models.DateTimeField()
+
+    def __str__(self):
+        return self.library.url

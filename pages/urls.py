@@ -26,7 +26,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('', dashboard, name='home'),
-    path('websiteCheckedLab/', websiteCheckedLab, name='websiteCheckedLab'),
+    path('websiteCheckedLab/', website_checked_lab, name='website_checked_lab'),
     path('signup/', signup, name='signup'),
     path('annotate/annotations', create_annotations, name='ann_create'),
     path('annotate/annotations/<int:annot_id>', modify_annotations, name='ann_modify'),
@@ -84,6 +84,7 @@ urlpatterns = [
     url(r'^(?P<username>[\w\d.@+-]+)/(?P<directory>[\w\d\s.&@+-\/]+)/(?P<url_id>[\d]+)/resources/', get_resources, name='navigate_resources_subdir'),
     path('<username>/<str:directory>/<int:url_id>/edit-bookmark', perform_link_operation, name='edit_bookmark'),
     path('<username>/<str:directory>/<int:url_id>/move-bookmark', perform_link_operation, name='move_bookmark'),
+    path('<username>/<str:directory>/<int:url_id>/edit-checking-logic', perform_link_checking_logic, name='edit_checking_logic'),
     url('^(?P<username>[\w\d.@+-]+)/(?P<directory>[\w\d\s.&@+-\/]+)/move-bookmark-multiple$', perform_link_operation, name='move_bookmark_multiple'),
     url('^(?P<username>[\w\d.@+-]+)/(?P<directory>[\w\d\s.&@+-\/]+)/archive-bookmark-multiple$', perform_link_operation, name='archive_bookmark_multiple'),
     url('^(?P<username>[\w\d.@+-]+)/(?P<directory>[\w\d\s.&@+-\/]+)/merge-bookmark-with$', perform_link_operation, name='merge_bookmark_with'),

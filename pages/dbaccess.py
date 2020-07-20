@@ -31,7 +31,7 @@ from django.utils import timezone
 from django.conf import settings
 from vinanti import Vinanti
 from bs4 import BeautifulSoup
-from .models import Library, Tags, URLTags, UserSettings
+from .models import Library, Tags, URLTags, UserSettings, URLChecking, URLCheckingResult
 from .summarize import Summarizer
 
 import subprocess
@@ -852,3 +852,63 @@ class DBAccess:
                .format(tags_new_add, tags_old_delete))
         logger.info(msg)
         return msg
+
+    @staticmethod
+    def edit_website_checking_logic(usr, request, url_id):
+        library = Library.objects.filter(usr=usr, id=url_id).first()
+        turl = request.POST.get('target_url', library.url)
+        script = request.POST.get('selector_script', 'empty')
+        expected = request.POST.get('expected_string', 'empty')
+        activate = request.POST.get('activate', False)
+
+        print(url_id, request.POST)
+        msg = 'Edited_CK'
+
+        url_checking = URLChecking.objects.filter(library_id=url_id).first()
+        if url_checking:
+            URLChecking.objects.filter(id=url_checking.id, library_id=url_id).update(
+                    library_id=url_id,
+                    url=turl,
+                    script=script,
+                    expected=expected,
+                    activate=activate,
+                    updated_at=timezone.now())
+            msg = msg + ' updated'
+        else:
+            URLChecking.objects.create(
+                    library_id=url_id,
+                    url=turl,
+                    script=script,
+                    expected=expected,
+                    activate=activate,
+                    updated_at=timezone.now())
+            msg = msg + ' created'
+
+        print(msg)
+        return msg
+
+    @staticmethod
+    def record_website_checking_result(usr, url_id, result):
+        library = Library.objects.filter(usr=usr, id=url_id).first()
+
+        activate = True
+        msg = 'record_CR'
+        if result["activate"] and not result["is_match"]:
+            URLCheckingResult.objects.create(
+                    library_id=url_id,
+                    status=result["status"],
+                    actual=result["actual"],
+                    updated_at=timezone.now())
+
+            url_checking = URLChecking.objects.filter(library_id=url_id).first()
+            URLChecking.objects.filter(id=url_checking.id, library_id=url_id).update(
+                    activate=False,
+                    updated_at=timezone.now())
+            msg = msg + ' created'
+            activate = False
+        else:
+            msg = msg + ' pass'
+
+        print(msg)
+
+        return activate

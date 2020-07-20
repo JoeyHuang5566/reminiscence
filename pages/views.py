@@ -98,13 +98,14 @@ def website_checked_lab(request, username=None, directory=None):
     if request.method == 'POST':
         form = CheckWebsite(request.POST)
 
-        res = requests.get(form["website_url"].value())
-        soup = BeautifulSoup(res.text, 'lxml')
-        titles = soup.select(form["selector_script"].value())
+        if form.is_valid():
+            res = requests.get(form["website_url"].value())
+            soup = BeautifulSoup(res.text, 'lxml')
+            titles = soup.select(form["selector_script"].value())
 
-        result["status"] = res.status_code
-        result["actual"] = titles[0].string if titles else ""
-        result["is_match"] = result["actual"] == form["expected_string"].value()
+            result["status"] = res.status_code
+            result["actual"] = titles[0].string if titles else ""
+            result["is_match"] = result["actual"] == form["expected_string"].value()
     else:
         form = CheckWebsite()
 
@@ -118,7 +119,7 @@ def website_checked_lab(request, username=None, directory=None):
     return response
 
 @login_required
-def perform_link_checking_logic(request, username, directory, url_id=None):
+def set_link_checking_logic(request, username, directory, url_id=None):
     usr = request.user
     logger.info(request.path_info)
     if username and usr.username != username:
@@ -128,14 +129,19 @@ def perform_link_checking_logic(request, username, directory, url_id=None):
     if request.method == 'POST':
         form = SetCheckingLogic(request.POST)
 
-        res = requests.get(form["target_url"].value())
-        soup = BeautifulSoup(res.text, 'lxml')
-        titles = soup.select(form["selector_script"].value())
+        if form.is_valid():
+            dbxs.edit_website_checking_logic(usr, request, url_id)
 
-        result["status"] = res.status_code
-        result["actual"] = titles[0].string if titles else ""
-        result["is_match"] = result["actual"] == form["expected_string"].value()
-        print(form["activate"].value())
+            res = requests.get(form["target_url"].value())
+            soup = BeautifulSoup(res.text, 'lxml')
+            titles = soup.select(form["selector_script"].value())
+
+            result["status"] = res.status_code
+            result["actual"] = titles[0].string if titles else ""
+            result["is_match"] = result["actual"] == form["expected_string"].value()
+            result["activate"] = True if form["activate"].value() == "True" else False
+
+            activate = dbxs.record_website_checking_result(usr, url_id, result)
     else:
         form = SetCheckingLogic()
         url_checking_logic = URLChecking.objects.filter(library_id = int(url_id)).first()

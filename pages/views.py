@@ -141,6 +141,7 @@ def set_link_checking_logic(request, username, directory, url_id=None):
             result["is_match"] = result["actual"] == form["expected_string"].value()
             result["activate"] = True if form["activate"].value() == "True" else False
 
+            dbxs.update_website_with_checking_tag(usr, url_id, result["activate"])
             activate = dbxs.record_website_checking_result(usr, url_id, result)
             if not activate:
                 form = form.clone_with_deactivate()

@@ -906,9 +906,63 @@ class DBAccess:
                     updated_at=timezone.now())
             msg = msg + ' created'
             activate = False
+            DBAccess.update_website_with_checking_tag(usr, url_id, activate)
         else:
             msg = msg + ' pass'
 
         print(msg)
 
         return activate
+
+    @staticmethod
+    def update_website_with_checking_tag(usr, url_id, activate):
+        tag_name = "activate"
+        opposite_of_tag_name = "deactivate"
+        if not activate:
+            tag_name, opposite_of_tag_name = opposite_of_tag_name, tag_name
+
+        msg = 'update_the_checking_tag ' + tag_name
+
+        tag, created = Tags.objects.get_or_create(
+            tag=tag_name
+        )
+        opposite_of_tag, created = Tags.objects.get_or_create(
+            tag=opposite_of_tag_name
+        )
+
+        library = Library.objects.filter(usr=usr, id=url_id).first()
+        tags = library.tags.split(',')
+
+        if tag_name in tags:
+            return
+        else:
+            tags.append(tag_name)
+            library.tags = ','.join(tags)
+            library.save()
+
+        if opposite_of_tag_name in tags:
+            tags.remove(opposite_of_tag_name)
+            library.tags = ','.join(tags)
+            library.save()
+
+        opposite_of_tag_in_urltags = URLTags.objects.filter(
+                usr_id_id=usr.id,
+                url_id_id=url_id,
+                tag_id_id=opposite_of_tag.id
+                ).first()
+
+        if opposite_of_tag_in_urltags:
+            opposite_of_tag_in_urltags.delete()
+
+        tag_in_urltags = URLTags.objects.filter(
+                usr_id_id=usr.id,
+                url_id_id=url_id,
+                tag_id_id=tag.id
+                ).first()
+        if not tag_in_urltags:
+            URLTags.objects.create(
+                    usr_id_id=usr.id,
+                    url_id_id=url_id,
+                    tag_id_id=tag.id
+                    )
+        print(msg)

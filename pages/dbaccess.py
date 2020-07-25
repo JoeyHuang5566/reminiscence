@@ -870,7 +870,7 @@ class DBAccess:
                     library_id=url_id,
                     url=turl,
                     script=script,
-                    expected=expected,
+                    expected=expected.strip(),
                     activate=activate,
                     updated_at=timezone.now())
             msg = msg + ' updated'
@@ -879,7 +879,7 @@ class DBAccess:
                     library_id=url_id,
                     url=turl,
                     script=script,
-                    expected=expected,
+                    expected=expected.strip(),
                     activate=activate,
                     updated_at=timezone.now())
             msg = msg + ' created'
@@ -897,7 +897,7 @@ class DBAccess:
             URLCheckingResult.objects.create(
                     library_id=url_id,
                     status=result["status"],
-                    actual=result["actual"],
+                    actual=result["actual"].strip(),
                     updated_at=timezone.now())
 
             url_checking = URLChecking.objects.filter(library_id=url_id).first()

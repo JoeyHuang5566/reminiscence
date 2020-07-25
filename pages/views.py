@@ -104,8 +104,8 @@ def website_checked_lab(request, username=None, directory=None):
             titles = soup.select(form["selector_script"].value())
 
             result["status"] = res.status_code
-            result["actual"] = titles[0].string if titles else ""
-            result["is_match"] = result["actual"] == form["expected_string"].value()
+            result["actual"] = titles[0].string.strip() if titles else ""
+            result["is_match"] = result["actual"] == form["expected_string"].value().strip()
     else:
         form = CheckWebsite()
 
@@ -137,8 +137,8 @@ def set_link_checking_logic(request, username, directory, url_id=None):
             titles = soup.select(form["selector_script"].value())
 
             result["status"] = res.status_code
-            result["actual"] = titles[0].string if titles else ""
-            result["is_match"] = result["actual"] == form["expected_string"].value()
+            result["actual"] = titles[0].string.strip() if titles else ""
+            result["is_match"] = result["actual"] == form["expected_string"].value().strip()
             result["activate"] = True if form["activate"].value() == "True" else False
 
             dbxs.update_website_with_checking_tag(usr, url_id, result["activate"])

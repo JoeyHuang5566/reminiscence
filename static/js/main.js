@@ -98,6 +98,9 @@ function dropdown_menu_clicked(element){
                 move_to_bookmark(post_data, api_link, nlink, csrftoken, el, '', false);
             }
         }
+    }else if(link == 'url_read_new'){
+        var nlink = $(element).attr('data-link');
+        window.open(nlink, '_blank');
     }else if(link == 'url_read'){
         var nlink = $(element).attr('data-link');
         window.location.href = nlink;
@@ -786,7 +789,7 @@ function create_table_rows(usr, badge_nodes, index, title, netloc,
                  onclick="onsearch_dropdown(event, id)">Edit Bookmark</span>
 
                 <span id="drop-check-${index}" class="dropdown-item" \
-                 data-link="${edit_ck}" title="${title}" data-val="url_read"\
+                 data-link="${edit_ck}" title="${title}" data-val="url_read_new"\
                  onclick="onsearch_dropdown(event, id)">Edit Checking Logic</span>
                  
                 <div class="dropdown-divider"></div>

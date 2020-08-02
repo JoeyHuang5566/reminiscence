@@ -93,6 +93,9 @@ Table of Contents
 
 * Rudimentary support for adding custom note.
 
+* Using MySQL with utf8mb4 and changing some fields from char to text
+
+* Supports websites checking system for each bookmark by the selector script
 
 # Installation
 

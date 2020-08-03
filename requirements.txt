@@ -26,3 +26,5 @@ sqlparse==0.3.0
 vine==1.1.4
 yarl==1.2.6
 mysqlclient==1.4.6
+django-debug-toolbar==2.2
+requests==2.24.0

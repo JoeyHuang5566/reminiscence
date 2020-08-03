@@ -906,7 +906,6 @@ class DBAccess:
                     updated_at=timezone.now())
             msg = msg + ' created'
             activate = False
-            DBAccess.update_website_with_checking_tag(usr, url_id, activate)
         else:
             msg = msg + ' pass'
 

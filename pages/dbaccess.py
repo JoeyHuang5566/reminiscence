@@ -891,7 +891,7 @@ class DBAccess:
     def record_website_checking_result(usr, url_id, result):
         library = Library.objects.filter(usr=usr, id=url_id).first()
 
-        activate = True
+        activate = result["activate"]
         msg = 'record_CR'
         if result["activate"] and not result["is_match"]:
             URLCheckingResult.objects.create(
@@ -906,7 +906,15 @@ class DBAccess:
                     updated_at=timezone.now())
             msg = msg + ' created'
             activate = False
+        elif not result["activate"] and result["is_match"]:
+            url_checking = URLChecking.objects.filter(library_id=url_id).first()
+            URLChecking.objects.filter(id=url_checking.id, library_id=url_id).update(
+                    activate=True,
+                    updated_at=timezone.now())
+            msg = msg + ' update URLChecking'
+            activate = True
         else:
+            activate = None
             msg = msg + ' pass'
 
         print(msg)

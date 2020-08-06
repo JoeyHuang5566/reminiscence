@@ -142,10 +142,10 @@ class SetCheckingLogic(forms.Form):
     )
     activate = forms.BooleanField(required=False, widget=forms.Select(choices=CHOICES))
 
-    def clone_with_deactivate(self):
+    def clone_with_activate(self, activate = True):
         new_form = SetCheckingLogic()
         new_form.fields["target_url"].initial = self["target_url"].value()
         new_form.fields["selector_script"].initial = self["selector_script"].value()
         new_form.fields["expected_string"].initial = self["expected_string"].value()
-        new_form.fields["activate"].initial = False
+        new_form.fields["activate"].initial = activate
         return new_form

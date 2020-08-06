@@ -130,8 +130,6 @@ def set_link_checking_logic(request, username, directory, url_id=None):
         form = SetCheckingLogic(request.POST)
 
         if form.is_valid():
-            dbxs.edit_website_checking_logic(usr, request, url_id)
-
             res = requests.get(form["target_url"].value())
             soup = BeautifulSoup(res.text, 'lxml')
             titles = soup.select(form["selector_script"].value())
@@ -149,6 +147,8 @@ def set_link_checking_logic(request, username, directory, url_id=None):
                     form = form.clone_with_activate()
                 else:
                     form = form.clone_with_activate(False)
+
+            dbxs.edit_website_checking_logic(usr, form, url_id)
     else:
         form = SetCheckingLogic()
         url_checking_logic = URLChecking.objects.filter(library_id = int(url_id)).first()

@@ -854,14 +854,13 @@ class DBAccess:
         return msg
 
     @staticmethod
-    def edit_website_checking_logic(usr, request, url_id):
+    def edit_website_checking_logic(usr, form, url_id):
         library = Library.objects.filter(usr=usr, id=url_id).first()
-        turl = request.POST.get('target_url', library.url)
-        script = request.POST.get('selector_script', 'empty')
-        expected = request.POST.get('expected_string', 'empty')
-        activate = request.POST.get('activate', False)
+        turl = form["target_url"].value()
+        script = form["selector_script"].value()
+        expected = form["expected_string"].value()
+        activate = form["activate"].value()
 
-        print(url_id, request.POST)
         msg = 'Edited_CK'
 
         url_checking = URLChecking.objects.filter(library_id=url_id).first()
@@ -899,18 +898,9 @@ class DBAccess:
                     status=result["status"],
                     actual=result["actual"].strip(),
                     updated_at=timezone.now())
-
-            url_checking = URLChecking.objects.filter(library_id=url_id).first()
-            URLChecking.objects.filter(id=url_checking.id, library_id=url_id).update(
-                    activate=False,
-                    updated_at=timezone.now())
             msg = msg + ' created'
             activate = False
         elif not result["activate"] and result["is_match"]:
-            url_checking = URLChecking.objects.filter(library_id=url_id).first()
-            URLChecking.objects.filter(id=url_checking.id, library_id=url_id).update(
-                    activate=True,
-                    updated_at=timezone.now())
             msg = msg + ' update URLChecking'
             activate = True
         else:

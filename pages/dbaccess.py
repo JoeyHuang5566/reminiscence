@@ -859,7 +859,7 @@ class DBAccess:
         turl = form["target_url"].value()
         script = form["selector_script"].value()
         expected = form["expected_string"].value()
-        activate = form["activate"].value()
+        activate = True if form["activate"].value() == "True" else False
 
         msg = 'Edited_CK'
 
